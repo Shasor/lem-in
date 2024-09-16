@@ -20,4 +20,6 @@ $ ./lem-in <file_name>.txt
 
 ### Author(s)
 
+- [Théo VALLOIS](https://zone01normandie.org/git/tvallois)
+- [Arnaud de Dreuzy](https://zone01normandie.org/git/adedreuz)
 - [Adam GONÇALVES](https://zone01normandie.org/git/agoncalv) (aka [Shasor#3755](https://discordapp.com/users/282816260075683841))
