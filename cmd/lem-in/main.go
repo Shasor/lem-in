@@ -1,9 +1,9 @@
 package main
 
 import (
-	"lem-in/pkg/core"
+	"lem-in/pkg/input"
 )
 
 func main() {
-	core.Init()
+	input.InputInit()
 }
