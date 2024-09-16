@@ -1,3 +1,9 @@
+## PERSO
+
+*.txt
+
+## END Perso
+
 # ---> ArchLinuxPackages
 *.tar
 *.tar.*
