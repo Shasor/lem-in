@@ -1,5 +1,0 @@
-package input
-
-func InputHandler() {
-
-}
