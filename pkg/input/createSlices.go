@@ -2,7 +2,6 @@ package input
 
 import (
 	"fmt"
-	"lem-in/config"
 	"lem-in/pkg/core"
 	"os"
 	"strconv"
@@ -10,7 +9,7 @@ import (
 )
 
 func CreateAnts(line string) {
-	if len(config.Ants) == 0 {
+	if len(core.Ants) == 0 {
 		nbr_ants, err := strconv.Atoi(line)
 		core.ErrorsHandler(err)
 		for i := 1; i <= nbr_ants; i++ {
@@ -57,7 +56,7 @@ func AddLinks(line string) {
 
 		// Check if room name exist
 		var count0, count1 int
-		for _, room := range config.Rooms {
+		for _, room := range core.Rooms {
 			if parts[0] == room.Name {
 				count0++
 			}
@@ -70,12 +69,12 @@ func AddLinks(line string) {
 			os.Exit(1)
 		}
 
-		for i := range config.Rooms {
-			if config.Rooms[i].Name == parts[0] {
-				config.Rooms[i].Links = append(config.Rooms[i].Links, parts[1])
+		for i := range core.Rooms {
+			if core.Rooms[i].Name == parts[0] {
+				core.Rooms[i].Links = append(core.Rooms[i].Links, parts[1])
 			}
-			if config.Rooms[i].Name == parts[1] {
-				config.Rooms[i].Links = append(config.Rooms[i].Links, parts[0])
+			if core.Rooms[i].Name == parts[1] {
+				core.Rooms[i].Links = append(core.Rooms[i].Links, parts[0])
 			}
 		}
 	}
@@ -89,7 +88,7 @@ func CreateRoom(name string, x, y int, isStart, isEnd bool) {
 		IsStart: isStart,
 		IsEnd:   isEnd,
 	}
-	config.Rooms = append(config.Rooms, r)
+	core.Rooms = append(core.Rooms, r)
 }
 
 func CreateAnt(i int) {
@@ -97,5 +96,5 @@ func CreateAnt(i int) {
 		Index: i,
 		Path:  []string{},
 	}
-	config.Ants = append(config.Ants, a)
+	core.Ants = append(core.Ants, a)
 }
