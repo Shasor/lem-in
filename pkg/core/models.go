@@ -12,3 +12,9 @@ type Ant struct {
 	Index int
 	Path  []string
 }
+
+var (
+	Rooms []Room
+	Ants  []Ant
+	Paths [][]string
+)
