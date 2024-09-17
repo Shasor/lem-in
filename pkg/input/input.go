@@ -2,8 +2,6 @@ package input
 
 import (
 	"bufio"
-	"fmt"
-	"lem-in/config"
 	"lem-in/pkg/core"
 	"os"
 	"strings"
@@ -41,5 +39,5 @@ func InputHandler(file string) {
 		// Add all their links to each room
 		AddLinks(line)
 	}
-	fmt.Println(config.Rooms) // to delete
+	core.AlgoInit()
 }
