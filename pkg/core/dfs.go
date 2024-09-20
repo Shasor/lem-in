@@ -5,7 +5,7 @@ func dfs(current, end int, path []int, visited []bool, paths *[][]string) {
 	path = append(path, current)
 
 	if current == end {
-		// Convertir les indices en noms de salles pour le chemin final
+		// Convertir les index en noms de salles pour le chemin final
 		namePath := make([]string, len(path))
 		for i, idx := range path {
 			namePath[i] = Rooms[idx].Name
