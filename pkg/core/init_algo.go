@@ -1,20 +1,21 @@
 package core
 
+import (
+	"fmt"
+)
+
 func AlgoInit() {
-	var start, end int
+	Paths = FindPaths()
+	// Obtenez le nombre de fourmis et la salle de départ
+	antCount := len(Ants)
+	startRoom := GetStartRoom()
 
-	// Trouver les index des salles de départ et d'arrivée
-	for i, room := range Rooms {
-		if room.IsStart {
-			start = i
-		}
-		if room.IsEnd {
-			end = i
-		}
+	// Optimisez la sélection des chemins
+	bestCombination := OptimizePathSelection(Paths, antCount, startRoom)
+
+	if len(bestCombination) > 0 {
+		SimulateAntMovement(bestCombination)
+	} else {
+		fmt.Println("Aucun chemin optimal trouvé.")
 	}
-
-	visited := make([]bool, len(Rooms))
-	dfs(start, end, []int{}, visited, &Paths)
-
-	SortPaths()
 }
