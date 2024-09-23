@@ -11,6 +11,15 @@ func getRoomByName(name string) *Room {
 	return nil
 }
 
+func getStartRoom() *Room {
+	for i := range Rooms {
+		if Rooms[i].IsStart {
+			return &Rooms[i]
+		}
+	}
+	return nil
+}
+
 func contains(slice []string, item string) bool {
 	for _, a := range slice {
 		if a == item {

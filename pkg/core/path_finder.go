@@ -140,7 +140,7 @@ func FindOptimalPaths() [][][]string {
 
 func FindOptimalPaths2() [][][]string {
 	Paths := FindPaths()
-	startRoom := GetStartRoom()
+	startRoom := getStartRoom()
 	if startRoom == nil {
 		fmt.Println("Salle de départ non trouvée.")
 		return nil
@@ -178,15 +178,6 @@ func FindOptimalPaths2() [][][]string {
 	bestCombination := OptimizePathSelection(optimalPaths, antCount, startRoom)
 
 	return [][][]string{bestCombination}
-}
-
-func GetStartRoom() *Room {
-	for i := range Rooms {
-		if Rooms[i].IsStart {
-			return &Rooms[i]
-		}
-	}
-	return nil
 }
 
 func findLeastConflictingPath(paths [][]string, existingPaths [][]string) []string {

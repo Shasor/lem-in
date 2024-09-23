@@ -8,7 +8,7 @@ func AlgoInit() {
 	Paths = FindPaths()
 	// Obtenez le nombre de fourmis et la salle de départ
 	antCount := len(Ants)
-	startRoom := GetStartRoom()
+	startRoom := getStartRoom()
 
 	// Optimisez la sélection des chemins
 	bestCombination := OptimizePathSelection(Paths, antCount, startRoom)
