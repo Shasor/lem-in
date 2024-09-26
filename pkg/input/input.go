@@ -2,6 +2,7 @@ package input
 
 import (
 	"bufio"
+	"fmt"
 	"lem-in/pkg/core"
 	"os"
 	"strings"
@@ -18,6 +19,7 @@ func InputHandler(file string) {
 
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+		fmt.Println(line)
 
 		if line == "" || strings.HasPrefix(line, "#") && line != "##start" && line != "##end" {
 			continue
@@ -39,5 +41,6 @@ func InputHandler(file string) {
 		// Add all their links to each room
 		AddLinks(line)
 	}
+	fmt.Printf("\n")
 	core.AlgoInit()
 }

@@ -52,7 +52,7 @@ func CreateRooms(line string) {
 }
 
 func AddLinks(line string) {
-	if strings.Contains(line, "-") {
+	if strings.Contains(line, "-") && !strings.Contains(line, ":") {
 		parts := strings.Split(line, "-")
 		if parts[0] == parts[1] {
 			fmt.Println("ERROR: invalid link syntax")
