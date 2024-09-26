@@ -13,7 +13,14 @@ func SimulateAntMovement(optimalPaths [][]string) {
 		return
 	}
 
-	if len(optimalPaths) == 2 {
+	var b bool
+	for _, path := range optimalPaths {
+		if len(path) == 2 {
+			b = true
+		}
+	}
+
+	if len(optimalPaths) == 2 && b {
 		SimulateAntMovement2(optimalPaths)
 	} else {
 		SimulateAntMovement1(optimalPaths)
