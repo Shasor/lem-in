@@ -41,7 +41,8 @@ func ParseInput(r io.Reader) (*GameState, error) {
 			if len(core.Ants) == 0 {
 				numAnts, err := strconv.Atoi(scanner.Text())
 				if err != nil {
-					return nil, fmt.Errorf("erreur lors de la lecture du nombre de fourmis: %v", err)
+					fmt.Println("ERROR: invalid data format")
+					os.Exit(1)
 				}
 				for i := 1; i <= numAnts; i++ {
 					input.CreateAnt(i)

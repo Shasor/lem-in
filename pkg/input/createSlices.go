@@ -19,7 +19,7 @@ func CreateAnts(line string) {
 		}
 	} else {
 		fmt.Println("ERROR: invalid data format")
-		os.Exit(0)
+		os.Exit(1)
 	}
 }
 
@@ -28,7 +28,7 @@ func CreateRooms(line string) {
 		parts := strings.Split(line, " ")
 		if len(parts) != 3 {
 			fmt.Println("ERROR: invalid data format")
-			os.Exit(0)
+			os.Exit(1)
 		}
 		name := parts[0]
 		x, err := strconv.Atoi(parts[1])
@@ -37,7 +37,7 @@ func CreateRooms(line string) {
 		core.ErrorsHandler(err)
 		if strings.HasPrefix(name, "L") {
 			fmt.Println("ERROR: invalid room name")
-			os.Exit(0)
+			os.Exit(1)
 		}
 		if nextIsStart {
 			CreateRoom(name, x, y, nextIsStart, false)
@@ -56,7 +56,7 @@ func AddLinks(line string) {
 		parts := strings.Split(line, "-")
 		if parts[0] == parts[1] {
 			fmt.Println("ERROR: invalid link syntax")
-			os.Exit(0)
+			os.Exit(1)
 		}
 
 		// Check if room name exist
@@ -71,7 +71,7 @@ func AddLinks(line string) {
 		}
 		if count0 == 0 || count1 == 0 {
 			fmt.Println("give me a valid link motherfucker!")
-			os.Exit(0)
+			os.Exit(1)
 		}
 
 		for i := range core.Rooms {
