@@ -16,21 +16,23 @@ func InputHandler(file string) {
 	defer content.Close()
 
 	scanner := bufio.NewScanner(content)
-
+	var history string
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		fmt.Println(line)
 
 		if line == "" || strings.HasPrefix(line, "#") && line != "##start" && line != "##end" {
+			history += line + "\n"
 			continue
 		}
 
 		if line == "##start" {
 			nextIsStart = true
+			history += line + "\n"
 			continue
 		}
 		if line == "##end" {
 			nextIsEnd = true
+			history += line + "\n"
 			continue
 		}
 
@@ -40,7 +42,8 @@ func InputHandler(file string) {
 
 		// Add all their links to each room
 		AddLinks(line)
+		history += line + "\n"
 	}
-	fmt.Printf("\n")
+	fmt.Println(history)
 	core.AlgoInit()
 }
