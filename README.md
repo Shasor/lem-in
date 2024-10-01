@@ -8,6 +8,8 @@ This project is meant to make we code a digital version of an ant farm.
 Lem-in will read from a file (describing the ants and the colony) given in the arguments.
 Upon successfully finding the quickest path, lem-in will display the content of the file passed as argument and each move the ants make from room to room.
 
+visualizer reads Lem-in's output, then launches a graphical display of the anthill and its resolution.
+
 ### Usage
 
 ```bash
@@ -15,6 +17,8 @@ $ make # to build
 Build in progress...
 OK!
 $ ./lem-in <file_name>.txt
+...
+$ ./lem-in <file_name>.txt | ./visualizer
 ...
 ```
 
