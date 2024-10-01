@@ -12,6 +12,32 @@ import (
 	"golang.org/x/image/font/basicfont"
 )
 
+func (leg *Leg) Draw(screen *ebiten.Image) {
+	// Calculer la fin de la cuisse
+	thighEndX := leg.StartX + leg.LongCuisse*float32(math.Cos(float64(leg.ThighCuisseAngle)))
+	thighEndY := leg.StartY + leg.LongCuisse*float32(math.Sin(float64(leg.ThighCuisseAngle)))
+
+	// Calculer la fin du tibia (à partir de la fin de la cuisse)
+	shinEndX := thighEndX + leg.LongTibia*float32(math.Cos(float64(leg.ThighCuisseAngle+leg.ShinTibiaAngle)))
+	shinEndY := thighEndY + leg.LongTibia*float32(math.Sin(float64(leg.ThighCuisseAngle+leg.ShinTibiaAngle)))
+
+	// Calculer la fin du pied (à partir de la fin du tibia)
+	footEndX := shinEndX + leg.LongPied*float32(math.Cos(float64(leg.ThighCuisseAngle+leg.ShinTibiaAngle+leg.FootAngle)))
+	footEndY := shinEndY + leg.LongPied*float32(math.Sin(float64(leg.ThighCuisseAngle+leg.ShinTibiaAngle+leg.FootAngle)))
+
+	// Dessiner la cuisse
+	vector.StrokeLine(screen, leg.StartX, leg.StartY, thighEndX, thighEndY, leg.StrokeWidth, leg.InnerColor, false)
+	vector.StrokeLine(screen, leg.StartX, leg.StartY, thighEndX, thighEndY, leg.StrokeWidth/2, leg.OutlineColor, false)
+
+	// Dessiner le tibia
+	vector.StrokeLine(screen, thighEndX, thighEndY, shinEndX, shinEndY, leg.StrokeWidth, leg.InnerColor, false)
+	vector.StrokeLine(screen, thighEndX, thighEndY, shinEndX, shinEndY, leg.StrokeWidth/2, leg.OutlineColor, false)
+
+	// Dessiner le pied
+	vector.StrokeLine(screen, shinEndX, shinEndY, footEndX, footEndY, leg.StrokeWidth, leg.InnerColor, false)
+	vector.StrokeLine(screen, shinEndX, shinEndY, footEndX, footEndY, leg.StrokeWidth/2, leg.OutlineColor, false)
+}
+
 // drawRooms dessine les salles sur l'écran
 func (a *App) drawRooms(screen *ebiten.Image) {
 	for _, room := range a.gameState.Rooms {
@@ -113,89 +139,41 @@ func (a *App) drawAnts(screen *ebiten.Image) {
 			vector.StrokeCircle(screen, screenX-float32(i)*bodySpacing, screenY, radius, 1, color.RGBA{0, 0, 0, 255}, false)
 		}
 
-		//------------ Pattes des Fourmis ------------\\
+		////////////// PATTES
 
-		// Paramètres des pattes
-		legOffsetLeft := float32(8)   // Écartement horizontal des pattes gauche
-		legOffsetRight := float32(-8) // Écartement horizontal des pattes droite
-		legOffsetCenter := float32(0) // Écartement horizontal de la patte centrale
+		// Définition des pattes avec des angles et positions spécifiques
+		legParams := []Leg{
+			{StartX: screenX - bodySpacing - 3, StartY: screenY, LongCuisse: 8, LongTibia: 6, LongPied: 4, ThighCuisseAngle: float32(math.Pi / 4), ShinTibiaAngle: float32(math.Pi / 3), FootAngle: float32(57 * math.Pi / 36), StrokeWidth: 2, OutlineColor: color.RGBA{R: 128, G: 128, B: 128, A: 255}, InnerColor: antColor}, // Patte avant gauche
+			{StartX: screenX - bodySpacing - 3, StartY: screenY, LongCuisse: 6, LongTibia: 4, LongPied: 2, ThighCuisseAngle: float32(7 * math.Pi / 12), ShinTibiaAngle: float32(7 * math.Pi / 4), FootAngle: float32(57 * math.Pi / 36), StrokeWidth: 1, OutlineColor: color.RGBA{R: 169, G: 169, B: 169, A: 255}, InnerColor: antColor},
+			{StartX: screenX - bodySpacing - 8, StartY: screenY, LongCuisse: 8, LongTibia: 6, LongPied: 4, ThighCuisseAngle: float32(math.Pi / 4), ShinTibiaAngle: float32(math.Pi / 3), FootAngle: float32(57 * math.Pi / 36), StrokeWidth: 2, OutlineColor: color.RGBA{R: 128, G: 128, B: 128, A: 255}, InnerColor: antColor}, // Patte avant gauche
+			{StartX: screenX - bodySpacing - 8, StartY: screenY, LongCuisse: 6, LongTibia: 4, LongPied: 2, ThighCuisseAngle: float32(7 * math.Pi / 12), ShinTibiaAngle: float32(7 * math.Pi / 4), FootAngle: float32(57 * math.Pi / 36), StrokeWidth: 1, OutlineColor: color.RGBA{R: 169, G: 169, B: 169, A: 255}, InnerColor: antColor},
+			{StartX: screenX - bodySpacing - 14, StartY: screenY, LongCuisse: 8, LongTibia: 6, LongPied: 4, ThighCuisseAngle: float32(math.Pi / 4), ShinTibiaAngle: float32(math.Pi / 3), FootAngle: float32(57 * math.Pi / 36), StrokeWidth: 2, OutlineColor: color.RGBA{R: 128, G: 128, B: 128, A: 255}, InnerColor: antColor}, // Patte avant gauche
+			{StartX: screenX - bodySpacing - 14, StartY: screenY, LongCuisse: 6, LongTibia: 4, LongPied: 2, ThighCuisseAngle: float32(7 * math.Pi / 12), ShinTibiaAngle: float32(7 * math.Pi / 4), FootAngle: float32(57 * math.Pi / 36), StrokeWidth: 1, OutlineColor: color.RGBA{R: 169, G: 169, B: 169, A: 255}, InnerColor: antColor},
+		}
 
-		// Longueur des segments des pattes
-		thighLength := float32(10) // Longueur de la cuisse
-		shinLength := float32(10)  // Longueur du tibia
-		footLength := float32(5)   // Longueur du pied
+		// Dessiner les pattes arrière en premier (2e, 4e, 6e) pour qu'elles apparaissent derrière le corps
+		for i, leg := range legParams {
+			if i%2 == 1 { // Index impair, donc pattes 2, 4, 6
+				leg.Draw(screen)
+			}
+		}
 
-		// Déplacement général des pattes
-		legShiftX := float32(0) // Déplacement horizontal du cercle imaginaire
-		legShiftY := float32(9) // Déplacement vertical du cercle imaginaire
+		// Dessiner les quatre cercles du corps de la fourmi
+		for i := 0; i < 4; i++ {
+			radius := bodyRadius
+			if i >= 1 && i <= 2 {
+				radius = middleRadius
+			}
+			vector.DrawFilledCircle(screen, screenX-float32(i)*bodySpacing, screenY, radius, antColor, false)
+			vector.StrokeCircle(screen, screenX-float32(i)*bodySpacing, screenY, radius, 1, color.RGBA{0, 0, 0, 255}, false)
+		}
 
-		// Variables pour animer les pattes
-		// animationSpeed := 0.1
-		// timeFactor := float32(a.currentMove)
-		// legAngle := float32(math.Sin(float64(timeFactor)*animationSpeed)) * 5 // Oscillation de l'animation
-
-		// Écartement des pattes
-		legOffsetLeft = float32(5)   // Écartement horizontal de la patte gauche
-		legOffsetRight = float32(-5) // Écartement horizontal de la patte droite
-		legOffsetCenter = float32(0) // Écartement horizontal de la patte centrale
-
-		// Longueurs des segments
-		thighLength = float32(8) // Longueur de la cuisse
-		shinLength = float32(8)  // Longueur du tibia
-		footLength = float32(5)  // Longueur du pied
-
-		// Angles des segments (en radians pour l'exemple)
-		thighAngle := float32(math.Pi / 3) // 120° pour la cuisse
-		shinAngle := float32(math.Pi / 3)  // 60° pour le tibia
-		footAngle := float32(math.Pi / 2)  // 120° pour le pied
-
-		// Déplacement général des pattes
-		legShiftX = float32(-10) // Déplacement horizontal
-		legShiftY = float32(0)   // Déplacement vertical
-
-		// Dessiner les pattes avec angles différents pour chaque segment
-
-		// Patte gauche
-
-		// Cuisse
-		cuisseGaucheX, cuisseGaucheY := calcSegmentPosition(screenX+legShiftX-legOffsetLeft, screenY+legShiftY, thighLength, thighAngle)
-		vector.StrokeLine(screen, screenX+legShiftX-legOffsetLeft, screenY+legShiftY, cuisseGaucheX, cuisseGaucheY, 2, antColor, false)
-
-		// Tibia
-		tibiaGaucheX, tibiaGaucheY := calcSegmentPosition(cuisseGaucheX, cuisseGaucheY, shinLength, shinAngle)
-		vector.StrokeLine(screen, cuisseGaucheX, cuisseGaucheY, tibiaGaucheX, tibiaGaucheY, 2, antColor, false)
-
-		// Pied
-		piedGaucheX, piedGaucheY := calcSegmentPosition(tibiaGaucheX, tibiaGaucheY, footLength, footAngle)
-		vector.StrokeLine(screen, tibiaGaucheX, tibiaGaucheY, piedGaucheX, piedGaucheY, 2, antColor, false)
-
-		// Patte droite
-
-		// Cuisse
-		cuisseDroiteX, cuisseDroiteY := calcSegmentPosition(screenX+legShiftX-legOffsetRight, screenY+legShiftY, thighLength, thighAngle)
-		vector.StrokeLine(screen, screenX+legShiftX-legOffsetRight, screenY+legShiftY, cuisseDroiteX, cuisseDroiteY, 2, antColor, false)
-
-		// Tibia
-		tibiaDroiteX, tibiaDroiteY := calcSegmentPosition(cuisseDroiteX, cuisseDroiteY, shinLength, shinAngle)
-		vector.StrokeLine(screen, cuisseDroiteX, cuisseDroiteY, tibiaDroiteX, tibiaDroiteY, 2, antColor, false)
-
-		// Pied
-		piedDroiteX, piedDroiteY := calcSegmentPosition(tibiaDroiteX, tibiaDroiteY, footLength, footAngle)
-		vector.StrokeLine(screen, tibiaDroiteX, tibiaDroiteY, piedDroiteX, piedDroiteY, 2, antColor, false)
-
-		// Patte centrale
-
-		// Cuisse
-		cuisseCentreX, cuisseCentreY := calcSegmentPosition(screenX+legShiftX+legOffsetCenter, screenY+legShiftY, thighLength, thighAngle)
-		vector.StrokeLine(screen, screenX+legShiftX+legOffsetCenter, screenY+legShiftY, cuisseCentreX, cuisseCentreY, 2, antColor, false)
-
-		// Tibia
-		tibiaCentreX, tibiaCentreY := calcSegmentPosition(cuisseCentreX, cuisseCentreY, shinLength, shinAngle)
-		vector.StrokeLine(screen, cuisseCentreX, cuisseCentreY, tibiaCentreX, tibiaCentreY, 2, antColor, false)
-
-		// Pied
-		piedCentreX, piedCentreY := calcSegmentPosition(tibiaCentreX, tibiaCentreY, footLength, footAngle)
-		vector.StrokeLine(screen, tibiaCentreX, tibiaCentreY, piedCentreX, piedCentreY, 2, antColor, false)
+		// Dessiner les pattes avant (1ère, 3e, 5e) pour qu'elles apparaissent devant le corps
+		for i, leg := range legParams {
+			if i%2 == 0 { // Index pair, donc pattes 1, 3, 5
+				leg.Draw(screen)
+			}
+		}
 
 		//////////////  ANTENNE
 

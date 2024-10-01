@@ -34,6 +34,20 @@ type AntMove struct {
 	Room  string
 }
 
+// Structure pour les pattes
+type Leg struct {
+	StartX, StartY   float32     // Point de départ (où la patte est attachée au corps)
+	LongCuisse       float32     // Longueur de la cuisse
+	LongTibia        float32     // Longueur du tibia
+	LongPied         float32     // Longueur du pied
+	ThighCuisseAngle float32     // Angle de la cuisse (en radians)
+	ShinTibiaAngle   float32     // Angle du tibia (en radians)
+	FootAngle        float32     // Angle du pied (en radians)
+	StrokeWidth      float32     // Largeur du trait
+	OutlineColor     color.Color // Couleur du contour
+	InnerColor       color.Color // Couleur interne de la patte
+}
+
 // CelebrationLight représente une lumière de célébration
 type CelebrationLight struct {
 	X, Y     float32
